@@ -70,29 +70,29 @@ ${formData.message}
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-24">
       {/* Header */}
-      <section className="py-16 luxury-gradient text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            Get in Touch
+      <section className="py-24 bg-black text-white border-b border-white/10">
+        <div className="container mx-auto px-6 text-center">
+          <h1 className="text-6xl md:text-7xl font-light mb-6 tracking-[0.08em]">
+            Get in <span className="italic text-luxury-silver">Touch</span>
           </h1>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto">
+          <p className="text-sm text-white/60 max-w-3xl mx-auto font-light tracking-wide leading-relaxed">
             Interested in partnering with us or learning more about our portfolio? We'd love to hear from you.
           </p>
         </div>
       </section>
 
       {/* Contact Info Cards */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="py-20 bg-background border-b border-white/10">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-10">
             {contactInfo.map((info) => (
-              <Card key={info.title} className="p-8 text-center hover:shadow-xl transition-luxury border-2 hover:border-luxury-gold">
-                <info.icon className="h-12 w-12 mx-auto mb-4 text-luxury-gold" />
-                <h3 className="text-xl font-semibold mb-2">{info.title}</h3>
-                <p className="text-lg font-medium mb-2 text-primary">{info.content}</p>
-                <p className="text-sm text-muted-foreground">{info.description}</p>
+              <Card key={info.title} className="p-10 text-center bg-card border border-white/10 hover-lift">
+                <info.icon className="h-10 w-10 mx-auto mb-6 text-luxury-silver" />
+                <h3 className="text-lg font-light mb-3 tracking-wider">{info.title}</h3>
+                <p className="text-base font-light mb-3 text-luxury-silver tracking-wide">{info.content}</p>
+                <p className="text-xs text-white/50 font-light">{info.description}</p>
               </Card>
             ))}
           </div>
@@ -100,23 +100,23 @@ ${formData.message}
       </section>
 
       {/* Contact Form */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-32">
+        <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Business <span className="text-luxury-gold">Inquiry Form</span>
+            <div className="text-center mb-16">
+              <h2 className="text-5xl md:text-6xl font-light mb-6 tracking-wide">
+                Business <span className="italic text-luxury-silver">Inquiry</span>
               </h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-sm text-white/60 font-light tracking-wide">
                 Fill out the form below and we'll get back to you within 24 hours
               </p>
             </div>
 
-            <Card className="p-8 md:p-12 border-2">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <Card className="p-10 md:p-14 bg-card border border-white/10">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
+                    <label htmlFor="name" className="block text-xs font-light mb-3 tracking-[0.15em] uppercase text-white/70">
                       Full Name *
                     </label>
                     <Input
@@ -185,7 +185,7 @@ ${formData.message}
                     required
                     value={formData.region}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 rounded-md border border-input bg-background"
+                    className="w-full px-4 py-3 bg-background border border-white/20 text-white/80 text-sm font-light focus:border-luxury-gold focus:outline-none transition-elegant"
                   >
                     <option value="">Select a region</option>
                     <option value="india">India</option>
@@ -214,12 +214,13 @@ ${formData.message}
                 <Button 
                   type="submit" 
                   size="lg" 
-                  className="w-full bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-dark font-semibold text-lg"
+                  variant="ghost"
+                  className="w-full text-xs tracking-[0.2em] uppercase font-light border border-white/30 hover:border-white hover:bg-transparent hover:text-white transition-elegant py-6"
                 >
                   Send Inquiry
                 </Button>
 
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-xs text-white/40 text-center font-light tracking-wide">
                   By submitting this form, you agree to be contacted by Tharakan Traders regarding business opportunities.
                 </p>
               </form>
@@ -229,28 +230,28 @@ ${formData.message}
       </section>
 
       {/* Additional Info */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
+      <section className="py-24 bg-black border-t border-white/10">
+        <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold mb-6 text-center">
+            <h3 className="text-3xl font-light mb-16 text-center tracking-wider">
               What to Expect
             </h3>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-16">
               <div className="text-center">
-                <div className="text-luxury-gold text-4xl font-bold mb-2">24h</div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-luxury-silver text-5xl font-light mb-4">24h</div>
+                <p className="text-xs text-white/50 font-light tracking-wide leading-relaxed">
                   We respond to all inquiries within one business day
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-luxury-gold text-4xl font-bold mb-2">100%</div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-luxury-silver text-5xl font-light mb-4">100%</div>
+                <p className="text-xs text-white/50 font-light tracking-wide leading-relaxed">
                   Confidential consultation about your business needs
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-luxury-gold text-4xl font-bold mb-2">∞</div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-luxury-silver text-5xl font-light mb-4">∞</div>
+                <p className="text-xs text-white/50 font-light tracking-wide leading-relaxed">
                   Tailored solutions for your specific requirements
                 </p>
               </div>

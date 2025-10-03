@@ -44,19 +44,19 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen pt-24">
       {/* Hero Section */}
       <section 
-        className="relative py-32 bg-cover bg-center"
+        className="relative py-40 bg-cover bg-center"
         style={{ backgroundImage: `url(${aboutBg})` }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
-        <div className="relative z-10 container mx-auto px-4">
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative z-10 container mx-auto px-6">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-              About <span className="text-luxury-gold">Tharakan Traders</span>
+            <h1 className="text-6xl md:text-7xl font-light mb-8 text-white tracking-[0.05em]">
+              About <span className="italic text-luxury-silver">Tharakan Traders</span>
             </h1>
-            <p className="text-xl text-white/90 leading-relaxed">
+            <p className="text-base text-white/80 leading-relaxed font-light tracking-wide">
               Premier distributor of luxury cosmetics and fragrances, connecting the world's most prestigious beauty brands with discerning retailers across India and the Middle East
             </p>
           </div>
@@ -64,15 +64,15 @@ const About = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="py-20 bg-background border-b border-white/10">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-luxury-gold mb-2">
+                <div className="text-5xl md:text-6xl font-light text-luxury-silver mb-3 tracking-wider">
                   {stat.number}
                 </div>
-                <div className="text-muted-foreground font-medium">
+                <div className="text-white/50 font-light text-xs tracking-[0.15em] uppercase">
                   {stat.label}
                 </div>
               </div>
@@ -82,13 +82,13 @@ const About = () => {
       </section>
 
       {/* Our Story */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-32">
+        <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 text-center">
-              Our <span className="text-luxury-gold">Story</span>
+            <h2 className="text-5xl md:text-6xl font-light mb-12 text-center tracking-wide">
+              Our <span className="italic text-luxury-silver">Story</span>
             </h2>
-            <div className="space-y-6 text-lg leading-relaxed text-muted-foreground">
+            <div className="space-y-8 text-sm leading-loose text-white/70 font-light">
               <p>
                 Tharakan Traders was founded with a singular vision: to bridge the gap between the world's most prestigious luxury beauty brands and the rapidly growing markets of India and the Middle East.
               </p>
@@ -107,21 +107,21 @@ const About = () => {
       </section>
 
       {/* Values Grid */}
-      <section className="py-24 bg-muted">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-            Why Partner With <span className="text-luxury-gold">Us</span>
+      <section className="py-32 bg-black border-t border-white/10">
+        <div className="container mx-auto px-6">
+          <h2 className="text-5xl md:text-6xl font-light mb-6 text-center tracking-wide">
+            Why Partner With <span className="italic text-luxury-silver">Us</span>
           </h2>
-          <p className="text-lg text-muted-foreground text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-sm text-white/60 text-center mb-20 max-w-3xl mx-auto font-light tracking-wide leading-relaxed">
             Our commitment to excellence, authenticity, and partnership drives everything we do
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-white/10">
             {values.map((value) => (
-              <Card key={value.title} className="p-8 hover:shadow-xl transition-luxury border-2 hover:border-luxury-gold">
-                <value.icon className="h-12 w-12 mb-4 text-luxury-gold" />
-                <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">
+              <Card key={value.title} className="p-10 bg-black border-0 hover-lift group">
+                <value.icon className="h-10 w-10 mb-6 text-luxury-silver group-hover:text-luxury-gold transition-elegant" />
+                <h3 className="text-lg font-light mb-4 tracking-wider">{value.title}</h3>
+                <p className="text-sm text-white/60 leading-relaxed font-light">
                   {value.description}
                 </p>
               </Card>
@@ -131,27 +131,27 @@ const About = () => {
       </section>
 
       {/* Markets Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
+      <section className="py-32">
+        <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8">
-              Our <span className="text-luxury-gold">Markets</span>
+            <h2 className="text-5xl md:text-6xl font-light mb-10 tracking-wide">
+              Our <span className="italic text-luxury-silver">Markets</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-12 leading-relaxed">
+            <p className="text-sm text-white/60 mb-16 leading-relaxed font-light tracking-wide">
               We specialize in two of the world's fastest-growing luxury markets, each with unique opportunities and requirements
             </p>
 
-            <div className="grid md:grid-cols-2 gap-8 text-left">
-              <Card className="p-8 border-2">
-                <h3 className="text-2xl font-bold mb-4 text-luxury-gold">India</h3>
-                <p className="text-muted-foreground leading-relaxed">
+            <div className="grid md:grid-cols-2 gap-10 text-left">
+              <Card className="p-10 bg-card border border-white/10 hover-lift">
+                <h3 className="text-2xl font-light mb-6 text-luxury-silver tracking-wider">India</h3>
+                <p className="text-sm text-white/70 leading-relaxed font-light">
                   With a burgeoning middle class and increasing appetite for luxury goods, India represents one of the most exciting opportunities in the global beauty market. We work with premier retailers across major metros and tier-1 cities, ensuring your brands reach India's most discerning consumers.
                 </p>
               </Card>
 
-              <Card className="p-8 border-2">
-                <h3 className="text-2xl font-bold mb-4 text-luxury-gold">Middle East</h3>
-                <p className="text-muted-foreground leading-relaxed">
+              <Card className="p-10 bg-card border border-white/10 hover-lift">
+                <h3 className="text-2xl font-light mb-6 text-luxury-silver tracking-wider">Middle East</h3>
+                <p className="text-sm text-white/70 leading-relaxed font-light">
                   The Middle East's sophisticated consumers have long appreciated luxury fragrances and cosmetics. Our established network spans the UAE, Saudi Arabia, and wider GCC region, connecting your brands with high-end department stores, specialty retailers, and luxury outlets.
                 </p>
               </Card>
@@ -161,17 +161,17 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 luxury-gradient text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Ready to Expand Your Reach?
+      <section className="py-32 bg-black text-white border-t border-white/10">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-5xl md:text-6xl font-light mb-8 tracking-wide">
+            Ready to Expand Your <span className="italic text-luxury-silver">Reach?</span>
           </h2>
-          <p className="text-xl mb-10 text-white/90 max-w-2xl mx-auto">
+          <p className="text-sm mb-12 text-white/60 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
             Partner with Tharakan Traders to bring your luxury beauty brands to India and the Middle East
           </p>
           <a 
             href="mailto:trade@tharakantraders.com"
-            className="inline-block bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-dark font-semibold text-lg px-10 py-4 rounded-md transition-luxury"
+            className="inline-block bg-transparent border border-white/30 hover:border-white text-white font-light text-xs tracking-[0.2em] uppercase px-12 py-6 transition-elegant"
           >
             trade@tharakantraders.com
           </a>
