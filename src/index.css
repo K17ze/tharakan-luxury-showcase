@@ -76,23 +76,28 @@ All colors MUST be HSL.
     @apply bg-background text-foreground antialiased;
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-weight: 300;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.015em;
+    font-size: 15px;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;
     font-weight: 400;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   h1 {
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 0.05em;
   }
 
   h2 {
-    letter-spacing: 0.06em;
+    letter-spacing: 0.03em;
+  }
+  
+  .logo-font {
+    font-family: 'Cinzel', serif;
+    font-weight: 500;
   }
 }
 
@@ -175,6 +180,41 @@ All colors MUST be HSL.
   .text-balance {
     text-wrap: balance;
   }
+  
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  .stagger-fade > * {
+    opacity: 0;
+    animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .stagger-fade > *:nth-child(1) { animation-delay: 0.1s; }
+  .stagger-fade > *:nth-child(2) { animation-delay: 0.2s; }
+  .stagger-fade > *:nth-child(3) { animation-delay: 0.3s; }
+  .stagger-fade > *:nth-child(4) { animation-delay: 0.4s; }
+  .stagger-fade > *:nth-child(5) { animation-delay: 0.5s; }
+  .stagger-fade > *:nth-child(6) { animation-delay: 0.6s; }
+  .stagger-fade > *:nth-child(7) { animation-delay: 0.7s; }
+  .stagger-fade > *:nth-child(8) { animation-delay: 0.8s; }
 }
 
 @keyframes fade-in-up {

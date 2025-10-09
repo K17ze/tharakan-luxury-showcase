@@ -22,9 +22,9 @@ export const Navigation = () => {
         <div className="flex items-center justify-between h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="text-xl tracking-[0.15em] font-light">
+            <div className="logo-font text-lg md:text-xl tracking-[0.2em]">
               <span className="text-foreground transition-elegant group-hover:text-luxury-gold">THARAKAN</span>
-              <span className="text-luxury-silver ml-3 transition-elegant group-hover:text-luxury-gold">TRADERS</span>
+              <span className="text-luxury-silver ml-2 md:ml-3 transition-elegant group-hover:text-luxury-gold">TRADERS</span>
             </div>
           </Link>
 
