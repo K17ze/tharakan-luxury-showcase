@@ -34,76 +34,79 @@ const Products = () => {
   return (
     <div className="min-h-screen pt-24">
       {/* Header */}
-      <section className="py-24 bg-black text-white border-b border-white/10">
+      <section className="py-32 bg-black text-white border-b border-white/5">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-6xl md:text-7xl font-light mb-6 tracking-[0.08em]">
-            Product <span className="italic text-luxury-silver">Catalogue</span>
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 tracking-[0.08em]">
+            OUR <span className="italic text-luxury-silver">COLLECTION</span>
           </h1>
-          <p className="text-sm text-white/60 max-w-3xl mx-auto font-light tracking-wide leading-relaxed">
-            Explore our extensive collection of luxury fragrances, cosmetics, and skincare from the world's most prestigious brands
+          <p className="text-xs text-white/50 max-w-3xl mx-auto font-light tracking-wide leading-loose">
+            Comprehensive portfolio of luxury fragrances, cosmetics, and skincare from the world's most prestigious beauty houses
           </p>
         </div>
       </section>
 
       {/* Filters */}
-      <section className="py-6 bg-background border-b border-white/10 sticky top-24 z-40 backdrop-blur-sm">
+      <section className="py-8 bg-background/95 border-b border-white/5 sticky top-24 z-40 backdrop-blur-md">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
             {/* Category Filter */}
-            <div className="flex gap-3 flex-wrap justify-center">
+            <div className="flex gap-6 flex-wrap justify-center">
               {categories.map((cat) => (
-                <Button
+                <button
                   key={cat.value}
-                  variant="ghost"
                   onClick={() => setSelectedCategory(cat.value)}
-                  className={`text-xs tracking-[0.15em] uppercase font-light transition-elegant ${
+                  className={`text-[10px] tracking-[0.25em] uppercase font-light transition-elegant relative group ${
                     selectedCategory === cat.value 
-                      ? "text-luxury-gold border-b border-luxury-gold" 
-                      : "text-white/60 hover:text-white border-b border-transparent"
+                      ? "text-foreground" 
+                      : "text-white/40 hover:text-white/80"
                   }`}
                 >
                   {cat.label}
-                </Button>
+                  <span className={`absolute -bottom-2 left-0 h-px bg-foreground transition-all duration-500 ${
+                    selectedCategory === cat.value ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`} />
+                </button>
               ))}
             </div>
 
-            {/* Gender Filter */}
-            <div className="flex gap-3 flex-wrap justify-center border-l border-white/10 pl-6">
-              {genders.map((gender) => (
-                <Button
-                  key={gender.value}
-                  variant="ghost"
-                  onClick={() => setSelectedGender(gender.value)}
-                  className={`text-xs tracking-[0.15em] uppercase font-light transition-elegant ${
-                    selectedGender === gender.value 
-                      ? "text-luxury-gold" 
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  {gender.label}
-                </Button>
-              ))}
-            </div>
+            <div className="flex items-center gap-6">
+              {/* Gender Filter */}
+              <div className="flex gap-4">
+                {genders.map((gender) => (
+                  <button
+                    key={gender.value}
+                    onClick={() => setSelectedGender(gender.value)}
+                    className={`text-[10px] tracking-[0.2em] uppercase font-light transition-elegant ${
+                      selectedGender === gender.value 
+                        ? "text-foreground" 
+                        : "text-white/40 hover:text-white/80"
+                    }`}
+                  >
+                    {gender.label}
+                  </button>
+                ))}
+              </div>
 
-            {/* Brand Filter */}
-            <select
-              value={selectedBrand}
-              onChange={(e) => setSelectedBrand(e.target.value)}
-              className="px-4 py-2 bg-background border border-white/20 text-white/80 text-xs tracking-wider font-light focus:border-luxury-gold focus:outline-none transition-elegant"
-            >
-              <option value="all">All Brands</option>
-              {brands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
+              {/* Brand Filter */}
+              <select
+                value={selectedBrand}
+                onChange={(e) => setSelectedBrand(e.target.value)}
+                className="px-4 py-2 bg-background border border-white/20 text-white/70 text-[10px] tracking-[0.2em] uppercase font-light focus:border-foreground focus:outline-none transition-elegant"
+              >
+                <option value="all">All Brands</option>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Products Grid */}
-      <section className="py-20">
+      <section className="py-24">
         <div className="container mx-auto px-6">
           {selectedBrand === "all" ? (
             // Group by brand when showing all
@@ -112,22 +115,22 @@ const Products = () => {
               if (brandProducts.length === 0) return null;
 
               return (
-                <div key={brand} className="mb-24">
-                  <div className="flex items-center justify-between mb-12 pb-4 border-b border-white/10">
-                    <h2 className="text-4xl md:text-5xl font-light tracking-wider">
-                      <span className="text-luxury-silver">{brand}</span>
+                <div key={brand} className="mb-32">
+                  <div className="flex items-center justify-between mb-16 pb-6 border-b border-white/5">
+                    <h2 className="text-3xl md:text-4xl font-light tracking-[0.15em]">
+                      {brand}
                     </h2>
-                    <Button
-                      variant="ghost"
+                    <button
                       onClick={() => setSelectedBrand(brand)}
-                      className="text-xs tracking-[0.15em] uppercase font-light border border-white/20 hover:border-luxury-gold hover:text-luxury-gold transition-elegant"
+                      className="text-[10px] tracking-[0.25em] uppercase font-light text-white/50 hover:text-foreground transition-elegant relative group"
                     >
                       View All
-                    </Button>
+                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground group-hover:w-full transition-all duration-500" />
+                    </button>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
-                    {brandProducts.map((product) => (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
+                    {brandProducts.slice(0, 8).map((product) => (
                       <ProductCard key={product.id} product={product} />
                     ))}
                   </div>
@@ -137,25 +140,24 @@ const Products = () => {
           ) : (
             // Show filtered products
             <div>
-              <div className="flex items-center justify-between mb-12 pb-4 border-b border-white/10">
-                <h2 className="text-4xl md:text-5xl font-light tracking-wider">
+              <div className="flex items-center justify-between mb-16 pb-6 border-b border-white/5">
+                <h2 className="text-3xl md:text-4xl font-light tracking-[0.15em]">
                   {selectedBrand === "all" ? "All Products" : selectedBrand}
-                  <span className="text-white/40 text-base ml-4 font-light">
-                    ({filteredProducts.length})
+                  <span className="text-white/30 text-sm ml-4 font-light tracking-wide">
+                    {filteredProducts.length} Products
                   </span>
                 </h2>
                 {selectedBrand !== "all" && (
-                  <Button
-                    variant="ghost"
+                  <button
                     onClick={() => setSelectedBrand("all")}
-                    className="text-xs tracking-[0.15em] uppercase font-light text-white/60 hover:text-white transition-elegant"
+                    className="text-[10px] tracking-[0.25em] uppercase font-light text-white/50 hover:text-foreground transition-elegant"
                   >
-                    Clear
-                  </Button>
+                    Clear Filter
+                  </button>
                 )}
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -164,9 +166,9 @@ const Products = () => {
           )}
 
           {filteredProducts.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground mb-6">
-                No products found matching your criteria
+            <div className="text-center py-32">
+              <p className="text-sm text-white/40 mb-8 font-light tracking-wide">
+                No products found matching your selection
               </p>
               <Button
                 onClick={() => {
@@ -174,8 +176,10 @@ const Products = () => {
                   setSelectedGender("all");
                   setSelectedBrand("all");
                 }}
+                variant="luxury"
+                className="text-[10px] tracking-[0.25em] uppercase"
               >
-                Clear All Filters
+                Reset Filters
               </Button>
             </div>
           )}
@@ -183,21 +187,21 @@ const Products = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-black border-t border-white/10">
+      <section className="py-40 bg-black border-t border-white/5">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-light mb-6 tracking-wide text-white">
-            Interested in Our <span className="italic text-luxury-silver">Products?</span>
+          <h2 className="text-4xl md:text-6xl font-light mb-8 tracking-wide text-white">
+            Partnership <span className="italic text-luxury-silver">Inquiries</span>
           </h2>
-          <p className="text-sm text-white/60 mb-10 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
-            Contact us for wholesale inquiries, pricing information, and partnership opportunities
+          <p className="text-xs text-white/50 mb-12 max-w-2xl mx-auto font-light tracking-wide leading-loose">
+            Connect with us for wholesale opportunities, pricing information, and distribution partnerships
           </p>
           <Button 
             asChild 
-            size="lg" 
-            variant="ghost"
-            className="text-xs tracking-[0.2em] uppercase font-light border border-white/30 hover:border-white hover:bg-transparent hover:text-white transition-elegant px-10 py-6"
+            size="xl" 
+            variant="luxury"
+            className="text-[10px] tracking-[0.25em] uppercase font-light hover-scale"
           >
-            <Link to="/contact">Request Information</Link>
+            <Link to="/contact">Contact Our Team</Link>
           </Button>
         </div>
       </section>
@@ -207,34 +211,37 @@ const Products = () => {
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <Card className="group overflow-hidden bg-card border border-white/10 hover-lift">
-      <div className="aspect-square overflow-hidden bg-black">
+    <div className="group cursor-pointer">
+      <div className="relative aspect-[3/4] overflow-hidden bg-black mb-6 luxury-border">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-elegant opacity-90 group-hover:opacity-100"
+          className="w-full h-full object-cover group-hover:scale-110 transition-elegant opacity-80 group-hover:opacity-100"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-elegant" />
       </div>
-      <div className="p-6">
-        <p className="text-xs font-light text-luxury-silver mb-2 tracking-[0.15em] uppercase">
+      <div className="space-y-3">
+        <p className="text-[10px] font-light text-white/40 tracking-[0.2em] uppercase">
           {product.brand}
         </p>
-        <h3 className="text-base font-light mb-3 line-clamp-2 tracking-wide">
+        <h3 className="text-sm font-light line-clamp-2 tracking-wide group-hover:text-luxury-gold transition-elegant">
           {product.name}
         </h3>
-        <p className="text-xs text-white/50 mb-4 line-clamp-2 font-light leading-relaxed">
+        <p className="text-xs text-white/40 line-clamp-2 font-light leading-relaxed">
           {product.description}
         </p>
-        <div className="flex gap-2">
-          <span className="text-xs px-3 py-1 bg-white/5 border border-white/10 font-light tracking-wider capitalize">
+        <div className="flex gap-2 pt-2">
+          <span className="text-[9px] px-2 py-1 bg-white/5 border border-white/10 font-light tracking-[0.15em] uppercase">
             {product.category}
           </span>
-          <span className="text-xs px-3 py-1 bg-white/5 border border-white/10 font-light tracking-wider capitalize">
-            {product.gender}
-          </span>
+          {product.gender !== "unisex" && (
+            <span className="text-[9px] px-2 py-1 bg-white/5 border border-white/10 font-light tracking-[0.15em] uppercase">
+              {product.gender}
+            </span>
+          )}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 
