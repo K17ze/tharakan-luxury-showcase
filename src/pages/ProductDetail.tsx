@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Share2, Mail, Heart, ZoomIn, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SiWhatsapp } from "react-icons/si";
 
 const ProductDetail = () => {
@@ -18,6 +18,14 @@ const ProductDetail = () => {
     (p) => p.brand.toLowerCase().replace(/\s+/g, '-') === brand &&
     p.id === slug
   );
+
+  // Initialize wishlist state from localStorage
+  useEffect(() => {
+    if (product) {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsWishlisted(wishlist.includes(product.id));
+    }
+  }, [product?.id]);
 
   if (!product) {
     return (
@@ -85,6 +93,9 @@ const ProductDetail = () => {
         description: `${product.name} added to your wishlist`
       });
     }
+    
+    // Dispatch custom event to sync across components
+    window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
   return (

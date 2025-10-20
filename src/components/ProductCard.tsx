@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Product } from "@/data/products";
 import { Link } from "react-router-dom";
 import { Heart, Eye, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -13,11 +13,31 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
   const { toast } = useToast();
-  const [isWishlisted, setIsWishlisted] = useState(() => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    return wishlist.includes(product.id);
-  });
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(0);
+
+  // Sync wishlist state with localStorage on mount and when product changes
+  useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    setIsWishlisted(wishlist.includes(product.id));
+  }, [product.id]);
+
+  // Listen for storage changes to sync across components
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsWishlisted(wishlist.includes(product.id));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Also listen for custom wishlist update events
+    window.addEventListener('wishlistUpdated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('wishlistUpdated', handleStorageChange);
+    };
+  }, [product.id]);
 
   const images = product.images || [product.image];
 
@@ -42,6 +62,9 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
         description: `${product.name} added to your wishlist`
       });
     }
+    
+    // Dispatch custom event to sync across components
+    window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
   const handleQuickView = (e: React.MouseEvent) => {

@@ -16,6 +16,7 @@ const Products = () => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [showQuickView, setShowQuickView] = useState(false);
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
+  const [wishlistVersion, setWishlistVersion] = useState(0);
 
   // Load saved filter preferences
   useEffect(() => {
@@ -31,6 +32,21 @@ const Products = () => {
         console.error('Failed to load filter preferences', e);
       }
     }
+  }, []);
+
+  // Listen for wishlist updates to trigger re-render
+  useEffect(() => {
+    const handleWishlistUpdate = () => {
+      setWishlistVersion(v => v + 1);
+    };
+
+    window.addEventListener('wishlistUpdated', handleWishlistUpdate);
+    window.addEventListener('storage', handleWishlistUpdate);
+
+    return () => {
+      window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+      window.removeEventListener('storage', handleWishlistUpdate);
+    };
   }, []);
 
   const brands = Array.from(new Set(products.map(p => p.brand))).sort();

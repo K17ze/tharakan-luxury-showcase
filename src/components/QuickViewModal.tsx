@@ -3,7 +3,7 @@ import { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Heart, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface QuickViewModalProps {
@@ -15,11 +15,16 @@ interface QuickViewModalProps {
 export const QuickViewModal = ({ product, open, onClose }: QuickViewModalProps) => {
   const { toast } = useToast();
   const [selectedImage, setSelectedImage] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(() => {
-    if (!product) return false;
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    return wishlist.includes(product.id);
-  });
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // Reset state when product changes
+  useEffect(() => {
+    if (product) {
+      setSelectedImage(0);
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      setIsWishlisted(wishlist.includes(product.id));
+    }
+  }, [product?.id]);
 
   if (!product) return null;
 
@@ -45,6 +50,9 @@ export const QuickViewModal = ({ product, open, onClose }: QuickViewModalProps) 
         description: `${product.name} added to your wishlist`
       });
     }
+    
+    // Dispatch custom event to sync across components
+    window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
   const shareProduct = () => {
