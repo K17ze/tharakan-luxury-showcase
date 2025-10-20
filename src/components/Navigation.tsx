@@ -1,15 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { MegaMenu } from "./MegaMenu";
 
 export const Navigation = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
   const navLinks = [
     { path: "/", label: "HOME" },
-    { path: "/products", label: "PRODUCTS" },
+    { path: "/products", label: "PRODUCTS", hasMega: true },
+    { path: "/brands", label: "BRANDS" },
     { path: "/about", label: "ABOUT US" },
     { path: "/contact", label: "CONTACT" },
   ];
@@ -31,16 +34,23 @@ export const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-12">
             {navLinks.map((link) => (
-              <Link
+              <div
                 key={link.path}
-                to={link.path}
-                className={`text-xs font-light tracking-[0.2em] uppercase transition-elegant relative group ${
-                  isActive(link.path) ? "text-luxury-gold" : "text-foreground/90 hover:text-foreground"
-                }`}
+                className="relative"
+                onMouseEnter={() => link.hasMega && setMegaMenuOpen(true)}
+                onMouseLeave={() => link.hasMega && setMegaMenuOpen(false)}
               >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-luxury-gold transition-all duration-500 group-hover:w-full" />
-              </Link>
+                <Link
+                  to={link.path}
+                  className={`text-xs font-light tracking-[0.2em] uppercase transition-elegant relative group flex items-center ${
+                    isActive(link.path) ? "text-luxury-gold" : "text-foreground/90 hover:text-foreground"
+                  }`}
+                >
+                  {link.label}
+                  {link.hasMega && <ChevronDown className="ml-1 h-3 w-3" />}
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-luxury-gold transition-all duration-500 group-hover:w-full" />
+                </Link>
+              </div>
             ))}
           </div>
 
@@ -87,6 +97,16 @@ export const Navigation = () => {
           </div>
         )}
       </div>
+
+      {/* Mega Menu */}
+      {megaMenuOpen && (
+        <div
+          onMouseEnter={() => setMegaMenuOpen(true)}
+          onMouseLeave={() => setMegaMenuOpen(false)}
+        >
+          <MegaMenu />
+        </div>
+      )}
     </nav>
   );
 };

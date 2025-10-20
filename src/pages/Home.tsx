@@ -11,24 +11,27 @@ const Home = () => {
   const featuredBrands = [
     "TOM FORD", "AMOUAGE", "LOUIS VUITTON", "PRADA", 
     "DIOR", "CHANEL", "CREED", "GIVENCHY", "HERMÈS", 
-    "YSL", "VERSACE", "BVLGARI"
+    "YSL", "VERSACE", "BVLGARI", "BURBERRY", "LA MER"
   ];
 
   const categories = [
     { 
       title: "Fragrances", 
       image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&q=80",
-      description: "Discover our curated collection of luxury perfumes"
+      description: "Discover our curated collection of luxury perfumes",
+      link: "/products?category=fragrance"
     },
     { 
       title: "Cosmetics", 
       image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80",
-      description: "Premium makeup from iconic beauty houses"
+      description: "Premium makeup from iconic beauty houses",
+      link: "/products?category=cosmetics"
     },
     { 
       title: "Skincare", 
       image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&q=80",
-      description: "Advanced skincare solutions for every need"
+      description: "Advanced skincare solutions for every need",
+      link: "/products?category=skincare"
     }
   ];
 
@@ -104,7 +107,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Brands Strip */}
+      {/* Featured Brands Strip - Enhanced with more brands */}
       <section className="py-20 bg-background border-y border-white/5">
         <div className="container mx-auto px-6">
           <p className="text-center text-[9px] text-white/30 mb-12 tracking-[0.4em] uppercase font-light">
@@ -112,16 +115,25 @@ const Home = () => {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 lg:gap-12">
             {featuredBrands.map((brand, index) => (
-              <div 
+              <Link
                 key={brand}
-                className="text-center opacity-0 animate-fade-in-up"
+                to={`/brands/${brand.toLowerCase().replace(/\s+/g, '-')}`}
+                className="text-center opacity-0 animate-fade-in-up group"
                 style={{ animationDelay: `${index * 0.1}s`, animationFillMode: 'forwards' }}
               >
-                <div className="text-sm md:text-base font-light text-white/40 tracking-[0.15em] hover:text-foreground hover:scale-105 transition-elegant cursor-default">
+                <div className="text-sm md:text-base font-light text-white/40 tracking-[0.15em] group-hover:text-foreground group-hover:scale-105 transition-elegant cursor-pointer">
                   {brand}
                 </div>
-              </div>
+              </Link>
             ))}
+          </div>
+          <div className="text-center mt-16">
+            <Link
+              to="/brands"
+              className="inline-block text-xs tracking-[0.2em] uppercase text-white/60 hover:text-luxury-gold transition-elegant underline-offset-4 hover:underline font-light"
+            >
+              View All Brands →
+            </Link>
           </div>
         </div>
       </section>
@@ -142,7 +154,7 @@ const Home = () => {
             {categories.map((category, index) => (
               <Link 
                 key={category.title} 
-                to="/products"
+                to={category.link}
                 className="group relative aspect-[3/4] overflow-hidden bg-black"
                 style={{ animationDelay: `${index * 0.15}s` }}
               >

@@ -211,8 +211,11 @@ const Products = () => {
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <div className="group cursor-pointer">
-      <div className="relative aspect-[3/4] overflow-hidden bg-black mb-6 luxury-border">
+    <Link
+      to={`/products/${product.brand.toLowerCase().replace(/\s+/g, '-')}/${product.name.toLowerCase().replace(/\s+/g, '-')}`}
+      className="group cursor-pointer block"
+    >
+      <div className="relative aspect-[3/4] overflow-hidden bg-black mb-6">
         <img
           src={product.image}
           alt={product.name}
@@ -241,7 +244,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
