@@ -1,42 +1,136 @@
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { products, Product } from "@/data/products";
-import { Link } from "react-router-dom";
+import { ProductCard } from "@/components/ProductCard";
+import { QuickViewModal } from "@/components/QuickViewModal";
+import { Checkbox } from "@/components/ui/checkbox";
+import { X, Save, Heart } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Products = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [selectedGender, setSelectedGender] = useState<string>("all");
-  const [selectedBrand, setSelectedBrand] = useState<string>("all");
+  const { toast } = useToast();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedFragranceFamilies, setSelectedFragranceFamilies] = useState<string[]>([]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showQuickView, setShowQuickView] = useState(false);
+  const [showWishlistOnly, setShowWishlistOnly] = useState(false);
+
+  // Load saved filter preferences
+  useEffect(() => {
+    const saved = localStorage.getItem('filterPreferences');
+    if (saved) {
+      try {
+        const prefs = JSON.parse(saved);
+        setSelectedCategories(prefs.categories || []);
+        setSelectedGenders(prefs.genders || []);
+        setSelectedBrands(prefs.brands || []);
+        setSelectedFragranceFamilies(prefs.fragranceFamilies || []);
+      } catch (e) {
+        console.error('Failed to load filter preferences', e);
+      }
+    }
+  }, []);
 
   const brands = Array.from(new Set(products.map(p => p.brand))).sort();
+  const fragranceFamilies = ["Oriental", "Woody", "Floral", "Fresh", "Citrus", "Spicy"];
   
   const filteredProducts = products.filter(product => {
-    if (selectedCategory !== "all" && product.category !== selectedCategory) return false;
-    if (selectedGender !== "all" && product.gender !== selectedGender && product.gender !== "unisex") return false;
-    if (selectedBrand !== "all" && product.brand !== selectedBrand) return false;
+    // Category filter
+    if (selectedCategories.length > 0 && !selectedCategories.includes(product.category)) return false;
+    
+    // Gender filter
+    if (selectedGenders.length > 0 && !selectedGenders.includes(product.gender) && product.gender !== "unisex") return false;
+    
+    // Brand filter
+    if (selectedBrands.length > 0 && !selectedBrands.includes(product.brand)) return false;
+    
+    // Fragrance Family filter
+    if (selectedFragranceFamilies.length > 0) {
+      if (!product.fragranceFamily || !selectedFragranceFamilies.includes(product.fragranceFamily)) return false;
+    }
+
+    // Wishlist filter
+    if (showWishlistOnly) {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      if (!wishlist.includes(product.id)) return false;
+    }
+    
     return true;
   });
 
   const categories = [
-    { value: "all", label: "All Categories" },
     { value: "fragrance", label: "Fragrances" },
     { value: "cosmetics", label: "Cosmetics" },
     { value: "skincare", label: "Skincare" },
   ];
 
   const genders = [
-    { value: "all", label: "All" },
     { value: "women", label: "Women" },
     { value: "men", label: "Men" },
+    { value: "unisex", label: "Unisex" },
   ];
+
+  const toggleCategory = (value: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
+    );
+  };
+
+  const toggleGender = (value: string) => {
+    setSelectedGenders(prev =>
+      prev.includes(value) ? prev.filter(g => g !== value) : [...prev, value]
+    );
+  };
+
+  const toggleBrand = (value: string) => {
+    setSelectedBrands(prev =>
+      prev.includes(value) ? prev.filter(b => b !== value) : [...prev, value]
+    );
+  };
+
+  const toggleFragranceFamily = (value: string) => {
+    setSelectedFragranceFamilies(prev =>
+      prev.includes(value) ? prev.filter(f => f !== value) : [...prev, value]
+    );
+  };
+
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setSelectedGenders([]);
+    setSelectedBrands([]);
+    setSelectedFragranceFamilies([]);
+    setShowWishlistOnly(false);
+  };
+
+  const saveFilterPreferences = () => {
+    const prefs = {
+      categories: selectedCategories,
+      genders: selectedGenders,
+      brands: selectedBrands,
+      fragranceFamilies: selectedFragranceFamilies
+    };
+    localStorage.setItem('filterPreferences', JSON.stringify(prefs));
+    toast({
+      title: "Filter preferences saved",
+      description: "Your filter selections have been saved for future visits"
+    });
+  };
+
+  const handleQuickView = (product: Product) => {
+    setQuickViewProduct(product);
+    setShowQuickView(true);
+  };
+
+  const activeFiltersCount = selectedCategories.length + selectedGenders.length + selectedBrands.length + selectedFragranceFamilies.length + (showWishlistOnly ? 1 : 0);
 
   return (
     <div className="min-h-screen pt-24">
       {/* Header */}
-      <section className="py-32 bg-black text-white border-b border-white/5">
+      <section className="py-24 md:py-32 bg-black text-white border-b border-white/5">
         <div className="container mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 tracking-[0.08em]">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 tracking-[0.08em]" data-testid="text-page-title">
             OUR <span className="italic text-luxury-silver">COLLECTION</span>
           </h1>
           <p className="text-xs text-white/50 max-w-3xl mx-auto font-light tracking-wide leading-loose">
@@ -45,206 +139,193 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="py-8 bg-background/95 border-b border-white/5 sticky top-24 z-40 backdrop-blur-md">
+      {/* Filters Sidebar + Products Grid */}
+      <section className="py-12">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
-            {/* Category Filter */}
-            <div className="flex gap-6 flex-wrap justify-center">
-              {categories.map((cat) => (
-                <button
-                  key={cat.value}
-                  onClick={() => setSelectedCategory(cat.value)}
-                  className={`text-[10px] tracking-[0.25em] uppercase font-light transition-elegant relative group ${
-                    selectedCategory === cat.value 
-                      ? "text-foreground" 
-                      : "text-white/40 hover:text-white/80"
-                  }`}
-                >
-                  {cat.label}
-                  <span className={`absolute -bottom-2 left-0 h-px bg-foreground transition-all duration-500 ${
-                    selectedCategory === cat.value ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`} />
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-col lg:flex-row gap-12">
+            {/* Filters Sidebar */}
+            <aside className="lg:w-80 flex-shrink-0">
+              <div className="sticky top-32 space-y-8">
+                {/* Filter Header */}
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-light tracking-wide">
+                    Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}
+                  </h2>
+                  <div className="flex gap-2">
+                    {activeFiltersCount > 0 && (
+                      <>
+                        <Button
+                          onClick={saveFilterPreferences}
+                          variant="ghost"
+                          size="sm"
+                          className="text-[9px] tracking-[0.2em] uppercase"
+                          data-testid="button-save-filters"
+                        >
+                          <Save className="h-3 w-3 mr-1" />
+                          Save
+                        </Button>
+                        <Button
+                          onClick={clearAllFilters}
+                          variant="ghost"
+                          size="sm"
+                          className="text-[9px] tracking-[0.2em] uppercase"
+                          data-testid="button-clear-filters"
+                        >
+                          <X className="h-3 w-3 mr-1" />
+                          Clear
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </div>
 
-            <div className="flex items-center gap-6">
-              {/* Gender Filter */}
-              <div className="flex gap-4">
-                {genders.map((gender) => (
-                  <button
-                    key={gender.value}
-                    onClick={() => setSelectedGender(gender.value)}
-                    className={`text-[10px] tracking-[0.2em] uppercase font-light transition-elegant ${
-                      selectedGender === gender.value 
-                        ? "text-foreground" 
-                        : "text-white/40 hover:text-white/80"
-                    }`}
-                  >
-                    {gender.label}
-                  </button>
-                ))}
+                {/* Wishlist Filter */}
+                <div className="border-t border-white/10 pt-6">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <Checkbox
+                      checked={showWishlistOnly}
+                      onCheckedChange={(checked) => setShowWishlistOnly(checked as boolean)}
+                      data-testid="checkbox-wishlist-only"
+                    />
+                    <div className="flex items-center gap-2">
+                      <Heart className="h-4 w-4 text-luxury-gold" />
+                      <span className="text-sm font-light tracking-wide group-hover:text-luxury-gold transition-elegant">
+                        Wishlist Only
+                      </span>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Category Filter */}
+                <div className="border-t border-white/10 pt-6">
+                  <h3 className="text-[10px] tracking-[0.25em] uppercase text-white/50 mb-4 font-light">
+                    Category
+                  </h3>
+                  <div className="space-y-3">
+                    {categories.map((cat) => (
+                      <label key={cat.value} className="flex items-center gap-3 cursor-pointer group">
+                        <Checkbox
+                          checked={selectedCategories.includes(cat.value)}
+                          onCheckedChange={() => toggleCategory(cat.value)}
+                          data-testid={`checkbox-category-${cat.value}`}
+                        />
+                        <span className="text-sm font-light tracking-wide group-hover:text-luxury-gold transition-elegant">
+                          {cat.label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Gender Filter */}
+                <div className="border-t border-white/10 pt-6">
+                  <h3 className="text-[10px] tracking-[0.25em] uppercase text-white/50 mb-4 font-light">
+                    Gender
+                  </h3>
+                  <div className="space-y-3">
+                    {genders.map((gender) => (
+                      <label key={gender.value} className="flex items-center gap-3 cursor-pointer group">
+                        <Checkbox
+                          checked={selectedGenders.includes(gender.value)}
+                          onCheckedChange={() => toggleGender(gender.value)}
+                          data-testid={`checkbox-gender-${gender.value}`}
+                        />
+                        <span className="text-sm font-light tracking-wide group-hover:text-luxury-gold transition-elegant">
+                          {gender.label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Fragrance Family Filter */}
+                <div className="border-t border-white/10 pt-6">
+                  <h3 className="text-[10px] tracking-[0.25em] uppercase text-white/50 mb-4 font-light">
+                    Fragrance Family
+                  </h3>
+                  <div className="space-y-3">
+                    {fragranceFamilies.map((family) => (
+                      <label key={family} className="flex items-center gap-3 cursor-pointer group">
+                        <Checkbox
+                          checked={selectedFragranceFamilies.includes(family)}
+                          onCheckedChange={() => toggleFragranceFamily(family)}
+                          data-testid={`checkbox-fragrance-${family.toLowerCase()}`}
+                        />
+                        <span className="text-sm font-light tracking-wide group-hover:text-luxury-gold transition-elegant">
+                          {family}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Brand Filter */}
+                <div className="border-t border-white/10 pt-6">
+                  <h3 className="text-[10px] tracking-[0.25em] uppercase text-white/50 mb-4 font-light">
+                    Brand
+                  </h3>
+                  <div className="space-y-3 max-h-64 overflow-y-auto">
+                    {brands.map((brand) => (
+                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
+                        <Checkbox
+                          checked={selectedBrands.includes(brand)}
+                          onCheckedChange={() => toggleBrand(brand)}
+                          data-testid={`checkbox-brand-${brand.toLowerCase().replace(/\s+/g, '-')}`}
+                        />
+                        <span className="text-sm font-light tracking-wide group-hover:text-luxury-gold transition-elegant">
+                          {brand}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            {/* Products Grid */}
+            <div className="flex-1">
+              <div className="mb-8">
+                <p className="text-sm text-white/50 font-light tracking-wide" data-testid="text-product-count">
+                  {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'}
+                </p>
               </div>
 
-              {/* Brand Filter */}
-              <select
-                value={selectedBrand}
-                onChange={(e) => setSelectedBrand(e.target.value)}
-                className="px-4 py-2 bg-background border border-white/20 text-white/70 text-[10px] tracking-[0.2em] uppercase font-light focus:border-foreground focus:outline-none transition-elegant"
-              >
-                <option value="all">All Brands</option>
-                {brands.map((brand) => (
-                  <option key={brand} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </select>
+              {filteredProducts.length === 0 ? (
+                <div className="text-center py-32">
+                  <p className="text-sm text-white/40 mb-8 font-light tracking-wide">
+                    No products found matching your selection
+                  </p>
+                  <Button
+                    onClick={clearAllFilters}
+                    variant="minimal"
+                    className="text-[10px] tracking-[0.25em] uppercase"
+                  >
+                    Clear All Filters
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                  {filteredProducts.map((product) => (
+                    <ProductCard 
+                      key={product.id} 
+                      product={product}
+                      onQuickView={handleQuickView}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Products Grid */}
-      <section className="py-24">
-        <div className="container mx-auto px-6">
-          {selectedBrand === "all" ? (
-            // Group by brand when showing all
-            brands.map((brand) => {
-              const brandProducts = filteredProducts.filter(p => p.brand === brand);
-              if (brandProducts.length === 0) return null;
-
-              return (
-                <div key={brand} className="mb-32">
-                  <div className="flex items-center justify-between mb-16 pb-6 border-b border-white/5">
-                    <h2 className="text-3xl md:text-4xl font-light tracking-[0.15em]">
-                      {brand}
-                    </h2>
-                    <button
-                      onClick={() => setSelectedBrand(brand)}
-                      className="text-[10px] tracking-[0.25em] uppercase font-light text-white/50 hover:text-foreground transition-elegant relative group"
-                    >
-                      View All
-                      <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground group-hover:w-full transition-all duration-500" />
-                    </button>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-                    {brandProducts.slice(0, 8).map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            // Show filtered products
-            <div>
-              <div className="flex items-center justify-between mb-16 pb-6 border-b border-white/5">
-                <h2 className="text-3xl md:text-4xl font-light tracking-[0.15em]">
-                  {selectedBrand === "all" ? "All Products" : selectedBrand}
-                  <span className="text-white/30 text-sm ml-4 font-light tracking-wide">
-                    {filteredProducts.length} Products
-                  </span>
-                </h2>
-                {selectedBrand !== "all" && (
-                  <button
-                    onClick={() => setSelectedBrand("all")}
-                    className="text-[10px] tracking-[0.25em] uppercase font-light text-white/50 hover:text-foreground transition-elegant"
-                  >
-                    Clear Filter
-                  </button>
-                )}
-              </div>
-
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-16">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-32">
-              <p className="text-sm text-white/40 mb-8 font-light tracking-wide">
-                No products found matching your selection
-              </p>
-              <Button
-                onClick={() => {
-                  setSelectedCategory("all");
-                  setSelectedGender("all");
-                  setSelectedBrand("all");
-                }}
-                variant="luxury"
-                className="text-[10px] tracking-[0.25em] uppercase"
-              >
-                Reset Filters
-              </Button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-40 bg-black border-t border-white/5">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-6xl font-light mb-8 tracking-wide text-white">
-            Partnership <span className="italic text-luxury-silver">Inquiries</span>
-          </h2>
-          <p className="text-xs text-white/50 mb-12 max-w-2xl mx-auto font-light tracking-wide leading-loose">
-            Connect with us for wholesale opportunities, pricing information, and distribution partnerships
-          </p>
-          <Button 
-            asChild 
-            size="xl" 
-            variant="luxury"
-            className="text-[10px] tracking-[0.25em] uppercase font-light hover-scale"
-          >
-            <Link to="/contact">Contact Our Team</Link>
-          </Button>
-        </div>
-      </section>
+      {/* Quick View Modal */}
+      <QuickViewModal
+        product={quickViewProduct}
+        open={showQuickView}
+        onClose={() => setShowQuickView(false)}
+      />
     </div>
-  );
-};
-
-const ProductCard = ({ product }: { product: Product }) => {
-  return (
-    <Link
-      to={`/products/${product.brand.toLowerCase().replace(/\s+/g, '-')}/${product.name.toLowerCase().replace(/\s+/g, '-')}`}
-      className="group cursor-pointer block"
-    >
-      <div className="relative aspect-[3/4] overflow-hidden bg-black mb-6">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-elegant opacity-80 group-hover:opacity-100"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-elegant" />
-      </div>
-      <div className="space-y-3">
-        <p className="text-[10px] font-light text-white/40 tracking-[0.2em] uppercase">
-          {product.brand}
-        </p>
-        <h3 className="text-sm font-light line-clamp-2 tracking-wide group-hover:text-luxury-gold transition-elegant">
-          {product.name}
-        </h3>
-        <p className="text-xs text-white/40 line-clamp-2 font-light leading-relaxed">
-          {product.description}
-        </p>
-        <div className="flex gap-2 pt-2">
-          <span className="text-[9px] px-2 py-1 bg-white/5 border border-white/10 font-light tracking-[0.15em] uppercase">
-            {product.category}
-          </span>
-          {product.gender !== "unisex" && (
-            <span className="text-[9px] px-2 py-1 bg-white/5 border border-white/10 font-light tracking-[0.15em] uppercase">
-              {product.gender}
-            </span>
-          )}
-        </div>
-      </div>
-    </Link>
   );
 };
 
