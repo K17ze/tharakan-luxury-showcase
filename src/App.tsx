@@ -13,6 +13,10 @@ import BrandDirectory from "./pages/BrandDirectory";
 import Collections from "./pages/Collections";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import News from "./pages/News";
+import Resources from "./pages/Resources";
+import Careers from "./pages/Careers";
+import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +38,10 @@ const App = () => (
           <Route path="/collections/:slug" element={<Collections />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/faq" element={<FAQ />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

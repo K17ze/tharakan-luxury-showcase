@@ -13,6 +13,7 @@ export const Navigation = () => {
     { path: "/", label: "HOME" },
     { path: "/products", label: "PRODUCTS", hasMega: true },
     { path: "/brands", label: "BRANDS" },
+    { path: "/news", label: "NEWS" },
     { path: "/about", label: "ABOUT US" },
     { path: "/contact", label: "CONTACT" },
   ];
