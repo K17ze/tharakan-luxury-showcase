@@ -1,6 +1,9 @@
 import { Card } from "@/components/ui/card";
 import { Globe, Shield, TrendingUp, Users, Award, Package, CheckCircle, MapPin, Building, Truck, Clock } from "lucide-react";
 import aboutBg from "@/assets/about-bg.jpg";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
+import { TiltCard } from "@/components/TiltCard";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const About = () => {
   const milestones = [
@@ -157,11 +160,15 @@ const About = () => {
   ];
 
   const stats = [
-    { number: "50+", label: "Luxury Brands" },
-    { number: "2", label: "Key Markets" },
-    { number: "500+", label: "Retail Partners" },
-    { number: "100%", label: "Authentic Products" }
+    { number: 50, label: "Luxury Brands", suffix: "+" },
+    { number: 2, label: "Key Markets", suffix: "" },
+    { number: 500, label: "Retail Partners", suffix: "+" },
+    { number: 100, label: "Authentic Products", suffix: "%" }
   ];
+
+  const timelineRef = useScrollAnimation({ stagger: 0.2 });
+  const teamRef = useScrollAnimation({ stagger: 0.15 });
+  const facilitiesRef = useScrollAnimation({ stagger: 0.15 });
 
   return (
     <div className="min-h-screen pt-24">
@@ -189,9 +196,11 @@ const About = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center" data-testid={`stat-${stat.label.toLowerCase().replace(/\s+/g, '-')}`}>
-                <div className="text-5xl md:text-6xl font-light text-luxury-silver mb-3 tracking-wider">
-                  {stat.number}
-                </div>
+                <AnimatedCounter 
+                  end={stat.number}
+                  suffix={stat.suffix}
+                  className="text-5xl md:text-6xl font-light text-gradient-gold mb-3 tracking-wider"
+                />
                 <div className="text-white/50 font-light text-xs tracking-[0.15em] uppercase">
                   {stat.label}
                 </div>
@@ -205,14 +214,15 @@ const About = () => {
       <section className="py-32 bg-black border-b border-white/10">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-light text-center mb-20 tracking-wide">
-            Our <span className="italic text-luxury-silver">Journey</span>
+            Our <span className="italic text-gradient-gold">Journey</span>
           </h2>
-          <div className="relative">
+          <div className="relative" ref={timelineRef}>
             <div className="absolute left-1/2 top-0 bottom-0 w-px bg-luxury-gold/20 hidden md:block" />
             <div className="space-y-16">
               {milestones.map((milestone, idx) => (
                 <div
                   key={milestone.year}
+                  data-animate
                   className={`flex flex-col md:flex-row gap-8 items-center ${
                     idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                   }`}
@@ -236,26 +246,28 @@ const About = () => {
       <section className="py-32 bg-background border-b border-white/10">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-light text-center mb-20 tracking-wide">
-            Leadership <span className="italic text-luxury-silver">Team</span>
+            Leadership <span className="italic text-gradient-gold">Team</span>
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8" ref={teamRef}>
             {team.map((member) => (
-              <Card key={member.name} className="overflow-hidden bg-card border border-white/10" data-testid={`team-member-${member.name.toLowerCase().replace(/\s+/g, '-')}`}>
-                <div className="aspect-square overflow-hidden bg-black">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover opacity-90"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-light mb-1 tracking-wide">{member.name}</h3>
-                  <p className="text-[10px] tracking-[0.2em] uppercase text-luxury-gold mb-3 font-light">
-                    {member.position}
-                  </p>
-                  <p className="text-xs text-white/60 font-light leading-relaxed">{member.bio}</p>
-                </div>
-              </Card>
+              <TiltCard key={member.name} data-animate>
+                <Card className="overflow-hidden bg-card border border-white/10 h-full" data-testid={`team-member-${member.name.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <div className="aspect-square overflow-hidden bg-black image-overlay">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover opacity-90"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-light mb-1 tracking-wide">{member.name}</h3>
+                    <p className="text-[10px] tracking-[0.2em] uppercase text-luxury-gold mb-3 font-light">
+                      {member.position}
+                    </p>
+                    <p className="text-xs text-white/60 font-light leading-relaxed">{member.bio}</p>
+                  </div>
+                </Card>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -265,18 +277,19 @@ const About = () => {
       <section className="py-32 bg-black border-b border-white/10">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl md:text-5xl font-light text-center mb-20 tracking-wide">
-            World-Class <span className="italic text-luxury-silver">Facilities</span>
+            World-Class <span className="italic text-gradient-gold">Facilities</span>
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8" ref={facilitiesRef}>
             {facilities.map((facility) => (
-              <Card key={facility.title} className="overflow-hidden bg-card border border-white/10" data-testid={`facility-${facility.title.toLowerCase().replace(/\s+/g, '-')}`}>
-                <div className="aspect-video overflow-hidden bg-black">
-                  <img
-                    src={facility.image}
-                    alt={facility.title}
-                    className="w-full h-full object-cover opacity-90"
-                  />
-                </div>
+              <TiltCard key={facility.title} data-animate>
+                <Card className="overflow-hidden bg-card border border-white/10 h-full" data-testid={`facility-${facility.title.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <div className="aspect-video overflow-hidden bg-black image-overlay">
+                    <img
+                      src={facility.image}
+                      alt={facility.title}
+                      className="w-full h-full object-cover opacity-90"
+                    />
+                  </div>
                 <div className="p-6">
                   <h3 className="text-xl font-light mb-3 tracking-wide">{facility.title}</h3>
                   <p className="text-sm text-white/60 font-light leading-relaxed mb-4">{facility.description}</p>
@@ -288,8 +301,9 @@ const About = () => {
                       </li>
                     ))}
                   </ul>
-                </div>
-              </Card>
+                  </div>
+                </Card>
+              </TiltCard>
             ))}
           </div>
         </div>
