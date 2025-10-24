@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { MegaMenu } from "./MegaMenu";
-import { DarkModeToggle } from "./DarkModeToggle";
 
 export const Navigation = () => {
   const location = useLocation();
@@ -14,7 +13,6 @@ export const Navigation = () => {
     { path: "/", label: "HOME" },
     { path: "/products", label: "PRODUCTS", hasMega: true },
     { path: "/brands", label: "BRANDS" },
-    { path: "/news", label: "NEWS" },
     { path: "/about", label: "ABOUT US" },
     { path: "/contact", label: "CONTACT" },
   ];
@@ -56,10 +54,9 @@ export const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Button & Dark Mode */}
-          <div className="hidden md:flex items-center gap-4">
-            <DarkModeToggle />
-            <Button asChild variant="ghost" className="text-xs tracking-[0.2em] uppercase font-light border border-white/20 hover:border-luxury-gold hover:bg-transparent hover:text-luxury-gold transition-elegant px-6 hover-magnetic">
+          {/* CTA Button */}
+          <div className="hidden md:block">
+            <Button asChild variant="ghost" className="text-xs tracking-[0.2em] uppercase font-light border border-white/20 hover:border-luxury-gold hover:bg-transparent hover:text-luxury-gold transition-elegant px-6">
               <Link to="/contact">Inquire</Link>
             </Button>
           </div>

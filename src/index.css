@@ -65,34 +65,6 @@ All colors MUST be HSL.
     --background: 0 0% 7%;
     --foreground: 0 0% 98%;
   }
-
-  .light {
-    /* Light mode for luxury brand feel */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 7%;
-
-    --card: 0 0% 95%;
-    --card-foreground: 0 0% 7%;
-
-    --popover: 0 0% 95%;
-    --popover-foreground: 0 0% 7%;
-
-    --primary: 0 0% 7%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 90%;
-    --secondary-foreground: 0 0% 7%;
-
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 40%;
-
-    --accent: 38 60% 65%;
-    --accent-foreground: 0 0% 7%;
-
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 38 60% 65%;
-  }
 }
 
 @layer base {

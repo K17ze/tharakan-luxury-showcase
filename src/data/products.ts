@@ -6,16 +6,6 @@ export interface Product {
   gender: "women" | "men" | "unisex";
   description: string;
   image: string;
-  images?: string[];
-  isNew?: boolean;
-  isFeatured?: boolean;
-  fragranceFamily?: "Oriental" | "Woody" | "Floral" | "Fresh" | "Citrus" | "Spicy";
-  notes?: {
-    top?: string[];
-    heart?: string[];
-    base?: string[];
-  };
-  relatedProducts?: string[];
 }
 
 export const products: Product[] = [

@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer className="bg-black text-white border-t border-white/10">
       <div className="container mx-auto px-6 py-20">
-        <div className="grid md:grid-cols-5 gap-12">
+        <div className="grid md:grid-cols-4 gap-16">
           {/* Company Info */}
           <div className="space-y-6">
             <h3 className="text-lg tracking-[0.15em] font-light">
@@ -42,11 +42,6 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/news" className="text-white/60 hover:text-white transition-elegant text-sm font-light">
-                  News
-                </Link>
-              </li>
-              <li>
                 <Link to="/about" className="text-white/60 hover:text-white transition-elegant text-sm font-light">
                   About Us
                 </Link>
@@ -59,28 +54,17 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Product Categories */}
           <div>
-            <h4 className="text-xs tracking-[0.2em] uppercase mb-6 text-luxury-silver font-light">Resources</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/resources" className="text-white/60 hover:text-white transition-elegant text-sm font-light">
-                  Business Resources
-                </Link>
-              </li>
-              <li>
-                <Link to="/careers" className="text-white/60 hover:text-white transition-elegant text-sm font-light">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-white/60 hover:text-white transition-elegant text-sm font-light">
-                  FAQ
-                </Link>
-              </li>
+            <h4 className="text-xs tracking-[0.2em] uppercase mb-6 text-luxury-silver font-light">Categories</h4>
+            <ul className="space-y-3 text-sm text-white/60 font-light">
+              <li>Women's Fragrances</li>
+              <li>Men's Fragrances</li>
+              <li>Luxury Cosmetics</li>
+              <li>Premium Skincare</li>
+              <li>Beauty Accessories</li>
             </ul>
           </div>
-
 
           {/* Contact Info */}
           <div>
