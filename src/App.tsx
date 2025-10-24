@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { CustomCursor } from "@/components/CustomCursor";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { LuxuryPreloader } from "@/components/LuxuryPreloader";
 import { PageTransition } from "@/components/PageTransition";
 import { Footer } from "@/components/Footer";
 import Home from "./pages/Home";
@@ -30,6 +31,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <LuxuryPreloader />
         <CustomCursor />
         <ScrollProgress />
         <Navigation />

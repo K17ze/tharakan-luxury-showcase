@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { ArrowRight, Shield, Globe, Award, TrendingUp, Mail, MapPin, ChevronLeft, ChevronRight, Instagram, Quote, Calendar, ChevronDown } from "lucide-react";
+import { ArrowRight, Shield, Globe, Award, TrendingUp, Mail, MapPin, ChevronLeft, ChevronRight, Instagram, Quote, Calendar, ChevronDown, Star, CheckCircle2 } from "lucide-react";
 import heroImage from "@/assets/hero-luxury.jpg";
 import { useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { ParallaxSection } from "@/components/ParallaxSection";
+import { GoldFoilText } from "@/components/GoldFoilText";
+import { TextureOverlay } from "@/components/TextureOverlay";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -182,6 +186,32 @@ const Home = () => {
     }
   ];
 
+  // Trust Signals
+  const trustSignals = [
+    {
+      icon: Award,
+      title: "ISO Certified",
+      description: "International quality standards"
+    },
+    {
+      icon: Shield,
+      title: "100% Authentic",
+      description: "Direct from brands"
+    },
+    {
+      icon: CheckCircle2,
+      title: "15+ Years",
+      description: "Industry experience"
+    },
+    {
+      icon: Star,
+      title: "500+ Partners",
+      description: "Retail network"
+    }
+  ];
+
+  const scrollRef = useScrollAnimation({ y: 60, opacity: 0, duration: 1, stagger: 0.15 });
+
   return (
     <div className="min-h-screen">
       {/* Enhanced Hero Section with Carousel */}
@@ -280,9 +310,31 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Brands Strip */}
-      <section className="py-20 bg-background border-y border-white/5">
+      {/* Trust Signals Bar */}
+      <section className="py-12 bg-black border-y border-white/5">
         <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {trustSignals.map((signal, index) => (
+              <div 
+                key={signal.title} 
+                className="flex flex-col items-center text-center gap-3 opacity-0 animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s`, animationFillMode: 'forwards' }}
+              >
+                <signal.icon className="h-6 w-6 text-luxury-gold" />
+                <div>
+                  <p className="text-sm font-light text-white mb-1">{signal.title}</p>
+                  <p className="text-xs text-white/40 font-light">{signal.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Brands Strip */}
+      <section className="py-20 bg-background border-y border-white/5 relative overflow-hidden">
+        <TextureOverlay opacity={0.02} />
+        <div className="container mx-auto px-6 relative z-10">
           <p className="text-center text-[9px] text-white/30 mb-12 tracking-[0.4em] uppercase font-light">
             Authorized Distribution Partners
           </p>
@@ -314,11 +366,12 @@ const Home = () => {
       </section>
 
       {/* Regional Presence Map */}
-      <section className="py-32 bg-black border-b border-white/5">
-        <div className="container mx-auto px-6">
+      <section className="py-32 bg-black border-b border-white/5 relative overflow-hidden">
+        <TextureOverlay opacity={0.03} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-light mb-6 tracking-[0.05em]">
-              Regional <span className="italic text-luxury-silver">Presence</span>
+              Regional <GoldFoilText>Presence</GoldFoilText>
             </h2>
             <p className="text-xs text-white/50 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
               Strategic distribution network across two of the world's fastest-growing luxury markets
@@ -364,31 +417,34 @@ const Home = () => {
       </section>
 
       {/* Categories Showcase */}
-      <section className="py-32 bg-background">
-        <div className="container mx-auto px-6">
+      <section className="py-32 bg-background relative overflow-hidden">
+        <TextureOverlay opacity={0.02} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-light mb-6 tracking-[0.05em]">
-              Product <span className="italic text-luxury-silver">Categories</span>
+              Product <GoldFoilText>Categories</GoldFoilText>
             </h2>
             <p className="text-xs text-white/50 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
               Comprehensive range of luxury beauty products across all categories
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6" ref={scrollRef}>
             {categories.map((category, index) => (
               <Link 
                 key={category.title} 
                 to={category.link}
-                className="group relative aspect-[3/4] overflow-hidden bg-black"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                className="group relative aspect-[3/4] overflow-hidden bg-black hover-lift"
+                data-animate
                 data-testid={`link-category-${category.title.toLowerCase()}`}
               >
-                <img 
-                  src={category.image} 
-                  alt={category.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-elegant opacity-70 group-hover:opacity-90"
-                />
+                <ParallaxSection speed={0.3}>
+                  <img 
+                    src={category.image} 
+                    alt={category.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-elegant opacity-70 group-hover:opacity-90"
+                  />
+                </ParallaxSection>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
                 <div className="absolute inset-0 p-10 flex flex-col justify-end">
                   <h3 className="text-3xl font-light mb-3 tracking-wide group-hover:text-luxury-gold transition-elegant">
@@ -408,11 +464,12 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 bg-black border-y border-white/5">
-        <div className="container mx-auto px-6">
+      <section className="py-32 bg-black border-y border-white/5 relative overflow-hidden">
+        <TextureOverlay opacity={0.03} />
+        <div className="container mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-light mb-6 tracking-[0.05em]">
-              Trusted by <span className="italic text-luxury-silver">Industry Leaders</span>
+              Trusted by <GoldFoilText>Industry Leaders</GoldFoilText>
             </h2>
             <p className="text-xs text-white/50 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
               What our retail partners say about working with us
@@ -423,10 +480,10 @@ const Home = () => {
             {testimonials.map((testimonial, index) => (
               <Card 
                 key={index} 
-                className="p-10 bg-card border border-white/10 hover-lift"
+                className="p-10 glass-card hover-lift pulse-glow"
                 data-testid={`card-testimonial-${index}`}
               >
-                <Quote className="h-10 w-10 text-luxury-gold/30 mb-6" />
+                <Quote className="h-10 w-10 text-luxury-gold/30 mb-6 float" />
                 <p className="text-sm text-white/70 leading-relaxed font-light mb-8 italic">
                   "{testimonial.quote}"
                 </p>
@@ -633,10 +690,12 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-40 bg-black">
-        <div className="container mx-auto px-6 text-center">
+      <section className="py-40 bg-black relative overflow-hidden">
+        <TextureOverlay opacity={0.04} />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-luxury-gold/5 to-black" />
+        <div className="container mx-auto px-6 text-center relative z-10">
           <h2 className="text-4xl md:text-6xl font-light mb-8 tracking-wide">
-            Ready to <span className="italic text-luxury-silver">Partner?</span>
+            Ready to <GoldFoilText className="italic">Partner?</GoldFoilText>
           </h2>
           <p className="text-xs text-white/50 mb-12 max-w-2xl mx-auto font-light tracking-wide leading-relaxed">
             Explore partnership opportunities with India and Middle East's leading luxury beauty distributor
