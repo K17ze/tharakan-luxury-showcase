@@ -6,6 +6,7 @@ import { QuickViewModal } from "@/components/QuickViewModal";
 import { Checkbox } from "@/components/ui/checkbox";
 import { X, Save, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { getWishlist } from "@/utils/wishlist";
 
 const Products = () => {
   const { toast } = useToast();
@@ -69,7 +70,7 @@ const Products = () => {
 
     // Wishlist filter
     if (showWishlistOnly) {
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const wishlist = getWishlist();
       if (!wishlist.includes(product.id)) return false;
     }
     

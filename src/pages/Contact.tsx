@@ -8,6 +8,7 @@ import { MapPin, Phone, Mail, Download, FileText, Building, Briefcase, Users, Pe
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { brandPartnershipSchema, retailerSchema, mediaSchema, careersSchema } from "@/schemas/contact";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -22,13 +23,26 @@ const Contact = () => {
     position: ""
   });
 
-  const handleSubmit = (formType: string) => (e: React.FormEvent) => {
+  const handleSubmit = (formType: string, schema: any) => (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Inquiry Submitted",
-      description: `Your ${formType} inquiry has been received. We'll respond within 24 hours.`
-    });
-    setFormData({ name: "", email: "", phone: "", company: "", message: "", inquiryType: "", region: "", position: "" });
+    
+    // Validate form data with zod
+    try {
+      schema.parse(formData);
+      
+      toast({
+        title: "Inquiry Submitted",
+        description: `Your ${formType} inquiry has been received. We'll respond within 24 hours.`
+      });
+      setFormData({ name: "", email: "", phone: "", company: "", message: "", inquiryType: "", region: "", position: "" });
+    } catch (error: any) {
+      const firstError = error.errors?.[0];
+      toast({
+        title: "Validation Error",
+        description: firstError?.message || "Please check your input and try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const updateField = (field: string, value: string) => {
@@ -145,7 +159,7 @@ const Contact = () => {
             <TabsContent value="brand">
               <Card className="p-8 bg-card border border-white/10">
                 <h3 className="text-2xl font-light mb-6 tracking-wide">Brand Partnership Inquiry</h3>
-                <form onSubmit={handleSubmit("brand partnership")} className="space-y-6">
+                <form onSubmit={handleSubmit("brand partnership", brandPartnershipSchema)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="brand-name">Brand Name *</Label>
@@ -220,7 +234,7 @@ const Contact = () => {
             <TabsContent value="retailer">
               <Card className="p-8 bg-card border border-white/10">
                 <h3 className="text-2xl font-light mb-6 tracking-wide">Retailer Partnership Inquiry</h3>
-                <form onSubmit={handleSubmit("retailer partnership")} className="space-y-6">
+                <form onSubmit={handleSubmit("retailer partnership", retailerSchema)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="retailer-name">Contact Name *</Label>
@@ -305,7 +319,7 @@ const Contact = () => {
             <TabsContent value="media">
               <Card className="p-8 bg-card border border-white/10">
                 <h3 className="text-2xl font-light mb-6 tracking-wide">Media & Press Inquiry</h3>
-                <form onSubmit={handleSubmit("media")} className="space-y-6">
+                <form onSubmit={handleSubmit("media", mediaSchema)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="media-name">Name *</Label>
@@ -381,7 +395,7 @@ const Contact = () => {
             <TabsContent value="careers">
               <Card className="p-8 bg-card border border-white/10">
                 <h3 className="text-2xl font-light mb-6 tracking-wide">Career Opportunities</h3>
-                <form onSubmit={handleSubmit("career")} className="space-y-6">
+                <form onSubmit={handleSubmit("career", careersSchema)} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="career-name">Full Name *</Label>

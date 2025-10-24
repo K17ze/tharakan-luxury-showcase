@@ -5,6 +5,7 @@ import { Heart, Eye, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { isInWishlist, addToWishlist, removeFromWishlist } from "@/utils/wishlist";
 
 interface ProductCardProps {
   product: Product;
@@ -18,15 +19,13 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
 
   // Sync wishlist state with localStorage on mount and when product changes
   useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    setIsWishlisted(wishlist.includes(product.id));
+    setIsWishlisted(isInWishlist(product.id));
   }, [product.id]);
 
   // Listen for storage changes to sync across components
   useEffect(() => {
     const handleStorageChange = () => {
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      setIsWishlisted(wishlist.includes(product.id));
+      setIsWishlisted(isInWishlist(product.id));
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -43,28 +42,22 @@ export const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
 
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     
     if (isWishlisted) {
-      const updated = wishlist.filter((id: string) => id !== product.id);
-      localStorage.setItem('wishlist', JSON.stringify(updated));
+      removeFromWishlist(product.id);
       setIsWishlisted(false);
       toast({
         title: "Removed from wishlist",
         description: `${product.name} removed from your wishlist`
       });
     } else {
-      wishlist.push(product.id);
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      addToWishlist(product.id);
       setIsWishlisted(true);
       toast({
         title: "Added to wishlist",
         description: `${product.name} added to your wishlist`
       });
     }
-    
-    // Dispatch custom event to sync across components
-    window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
   const handleQuickView = (e: React.MouseEvent) => {

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Heart, Share2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { isInWishlist, addToWishlist, removeFromWishlist } from "@/utils/wishlist";
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -21,8 +22,7 @@ export const QuickViewModal = ({ product, open, onClose }: QuickViewModalProps) 
   useEffect(() => {
     if (product) {
       setSelectedImage(0);
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      setIsWishlisted(wishlist.includes(product.id));
+      setIsWishlisted(isInWishlist(product.id));
     }
   }, [product?.id]);
 
@@ -31,28 +31,21 @@ export const QuickViewModal = ({ product, open, onClose }: QuickViewModalProps) 
   const images = product.images || [product.image];
 
   const toggleWishlist = () => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    
     if (isWishlisted) {
-      const updated = wishlist.filter((id: string) => id !== product.id);
-      localStorage.setItem('wishlist', JSON.stringify(updated));
+      removeFromWishlist(product.id);
       setIsWishlisted(false);
       toast({
         title: "Removed from wishlist",
         description: `${product.name} removed from your wishlist`
       });
     } else {
-      wishlist.push(product.id);
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      addToWishlist(product.id);
       setIsWishlisted(true);
       toast({
         title: "Added to wishlist",
         description: `${product.name} added to your wishlist`
       });
     }
-    
-    // Dispatch custom event to sync across components
-    window.dispatchEvent(new Event('wishlistUpdated'));
   };
 
   const shareProduct = () => {
